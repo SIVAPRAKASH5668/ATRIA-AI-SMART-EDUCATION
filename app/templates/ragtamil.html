@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edu-Gen Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #3730a3;
+            --secondary-color: #2563eb;
+            --light-bg: #f8fafc;
+            --dark-text: #1e293b;
+            --medium-text: #64748b;
+            --light-text: #94a3b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding-top: 0.5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--medium-text);
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .sidebar .nav-link.active {
+            color: var(--primary-color);
+            background-color: rgba(79, 70, 229, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .sidebar .nav-link:hover {
+            color: var(--primary-color);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        .sidebar-heading {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 1rem 1.25rem;
+            color: var(--medium-text);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+        
+        .brand-container {
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .brand-container .brand-icon {
+            font-size: 1.75rem;
+            margin-right: 0.5rem;
+        }
+        
+        .top-navbar {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            background: white;
+            height: 60px;
+        }
+        
+        .content-area {
+            padding-top: 80px;
+        }
+        
+        .main-content {
+            padding: 20px;
+            margin-top: 60px;
+        }
+        
+        .search-input {
+            border-radius: 50px;
+            padding-left: 2.5rem;
+            background-color: #f1f5f9;
+            border: none;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #64748b;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.5rem;
+            font-size: 0.65rem;
+        }
+        
+        /* RAG System Specific Styles */
+        .upload-section, .question-section, .result-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .upload-zone {
+            border: 2px dashed var(--secondary-color);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        
+        .upload-zone:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3730a3 0%, #2563eb 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #312e81 0%, #1e40af 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-section {
+            min-height: 200px;
+        }
+        
+        .response-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 15px;
+            border-left: 4px solid transparent;
+        }
+        
+        .success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left-color: #10b981;
+            color: #065f46;
+        }
+        
+        .error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left-color: #ef4444;
+            color: #b91c1c;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid rgba(55, 48, 163, 0.1);
+            border-top-color: var(--primary-color);
+            animation: spinner 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spinner {
+            to {transform: rotate(360deg);}
+        }
+        
+        .language-selector {
+            margin-bottom: 15px;
+        }
+        
+        .platform-title {
+            font-weight: 700;
+            background: linear-gradient(135deg, #3730a3 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .file-item {
+            background-color: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .file-item i {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 767.98px) {
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                z-index: 999;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .top-navbar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="sidebar-sticky">
+                    <div class="brand-container d-flex align-items-center">
+                        <i class="bi bi-book-half brand-icon"></i>
+                        <h5 class="m-0 fw-bold">Edu-Gen</h5>
+                    </div>
+                    
+                    <h6 class="sidebar-heading">Main Menu</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-book me-2"></i>
+                                My Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-journal-text me-2"></i>
+                                My Notes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-calendar-event me-2"></i>
+                                Schedule
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading mt-4">AI Tools</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/video2pdf">
+                                <i class="bi bi-camera-video me-2"></i>
+                                Video Analysis
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/rag">
+                                <i class="bi bi-question-circle me-2"></i>
+                                Question Your Notes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/notegen">
+                                <i class="bi bi-pencil me-2"></i>
+                                Note Generator
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/mcq">
+                                <i class="bi bi-list-check me-2"></i>
+                                MCQ Test
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/rag_tamil">
+                                <i class="bi bi-translate me-2"></i>
+                                RAG Tamil
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/memck">
+                                <i class="bi bi-brain me-2"></i>
+                                Personal Learning
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/content_to_ai_video">
+                                <i class="bi bi-film me-2"></i>
+                                AI Video
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading mt-4">Account</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-person me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-gear me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Top Navigation -->
+                <nav class="navbar navbar-expand-lg top-navbar fixed-top col-md-9 ms-sm-auto col-lg-10">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        
+                        <div class="d-none d-md-flex align-items-center">
+                            <h4 class="platform-title mb-0">Edu-Gen</h4>
+                        </div>
+                        
+                        <div class="position-relative d-none d-md-block" style="width: 300px;">
+                            <i class="bi bi-search search-icon"></i>
+                            <input class="form-control search-input" type="search" placeholder="Search..." aria-label="Search">
+                        </div>
+                        
+                        <div class="d-flex">
+                            <div class="dropdown me-3">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-globe me-1"></i> Language
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                    <li><a class="dropdown-item" href="#">English</a></li>
+                                    <li><a class="dropdown-item" href="#">தமிழ் (Tamil)</a></li>
+                                    <li><a class="dropdown-item" href="#">हिंदी (Hindi)</a></li>
+                                    <li><a class="dropdown-item" href="#">తెలుగు (Telugu)</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="position-relative me-3">
+                                <button class="btn btn-link text-dark position-relative">
+                                    <i class="bi bi-bell fs-5"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                                        3
+                                    </span>
+                                </button>
+                            </div>
+                            
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="user-avatar me-2">JS</div>
+                                    <div class="d-none d-md-block">
+                                        <div class="fw-semibold">John Smith</div>
+                                        <div class="small text-muted">Student</div>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Page Content -->
+                <div class="main-content">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">தமிழ் RAG அமைப்பு / Tamil RAG System</h3>
+                            </div>
+                            <p class="text-muted">Upload PDF documents and ask questions in Tamil or English</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Left Side - Upload and Question Area -->
+                        <div class="col-lg-6">
+                            <div class="upload-section">
+                                <h5 class="section-title"><i class="bi bi-file-earmark-pdf"></i> PDF பதிவேற்றம் / PDF Upload</h5>
+                                <div class="upload-zone" onclick="document.getElementById('pdfUpload').click();">
+                                    <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-2"></i>
+                                    <p class="mb-0">Drag & Drop or Click to Upload PDF</p>
+                                    <p class="text-muted small">Support for multiple files</p>
+                                </div>
+                                <input type="file" id="pdfUpload" accept=".pdf" multiple class="d-none">
+                                <div id="fileList" class="mt-3"></div>
+                                <button class="btn btn-primary w-100 mt-3">
+                                    <i class="bi bi-upload me-2"></i> பதிவேற்று / Upload
+                                </button>
+                            </div>
+                            
+                            <div class="question-section">
+                                <h5 class="section-title"><i class="bi bi-question-circle"></i> கேள்வி கேட்க / Ask Question</h5>
+                                <div class="mb-3">
+                                    <textarea id="questionInput" class="form-control" rows="3" placeholder="உங்கள் கேள்வியை இங்கே தட்டச்சு செய்யவும் / Type your question here..."></textarea>
+                                </div>
+                                <button class="btn btn-primary w-100" onclick="askQuestion()">
+                                    <i class="bi bi-search me-2"></i> கேள்வி கேள் / Ask Question
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Side - Result Area -->
+                        <div class="col-lg-6">
+                            <div class="result-section">
+                                <h5 class="section-title"><i class="bi bi-chat-left-text"></i> பதில் / Response</h5>
+                                <div id="loadingSpinner" class="text-center" style="display: none;">
+                                    <div class="spinner"></div>
+                                    <p class="text-muted mt-2">பதில் பெறுகிறது... / Getting response...</p>
+                                </div>
+                                <div id="response" class="response-box d-none">
+                                    <!-- Response will be shown here -->
+                                </div>
+                                <div class="text-center text-muted mt-4" id="emptyState">
+                                    <i class="bi bi-chat-dots fs-1 mb-2"></i>
+                                    <p>PDF களை பதிவேற்றி கேள்விகளைக் கேளுங்கள் / Upload PDFs and ask questions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function uploadFiles() {
+            const fileInput = document.getElementById('pdfUpload');
+            const files = fileInput.files;
+            if (files.length === 0) {
+                showResponse('PDF கோப்புகளை தேர்ந்தெடுக்கவும் / Please select PDF files', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            for (let file of files) {
+                formData.append('files[]', file);
+            }
+
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('emptyState').classList.add('d-none');
+            
+            fetch('/rag_tamil/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showResponse(data.success, 'success');
+                } else {
+                    showResponse(data.error, 'error');
+                }
+            })
+            .catch(() => {
+                showResponse('பதிவேற்றும் போது பிழை ஏற்பட்டது / Error during upload', 'error');
+            })
+            .finally(() => {
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
+        }
+
+        function askQuestion() {
+            const question = document.getElementById('questionInput').value.trim();
+            if (!question) {
+                showResponse('கேள்வியை உள்ளிடவும் / Please enter a question', 'error');
+                return;
+            }
+
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('emptyState').classList.add('d-none');
+            document.getElementById('response').classList.add('d-none');
+
+            fetch('/rag_tamil/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.answer) {
+                    showResponse(data.answer, 'success');
+                } else {
+                    showResponse(data.error, 'error');
+                }
+            })
+            .catch(() => {
+                showResponse('கேள்வி கேட்கும் போது பிழை ஏற்பட்டது / Error asking question', 'error');
+            })
+            .finally(() => {
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
+        }
+
+        function showResponse(message, type) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = message;
+            responseDiv.className = `response-box ${type}`;
+            responseDiv.classList.remove('d-none');
+            document.getElementById('emptyState').classList.add('d-none');
+        }
+
+        document.getElementById('pdfUpload').addEventListener('change', function() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            for (let file of this.files) {
+                fileList.innerHTML += `
+                    <div class="file-item">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        ${file.name}
+                    </div>`;
+            }
+        });
+
+        // Connect upload button to function
+        document.querySelector('.upload-section .btn-primary').addEventListener('click', uploadFiles);
+    </script>
+</body>
+</html>

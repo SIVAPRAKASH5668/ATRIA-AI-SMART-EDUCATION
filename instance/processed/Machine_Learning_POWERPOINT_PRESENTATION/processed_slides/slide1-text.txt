@@ -1,0 +1,9 @@
+Deep learning is a subfield of machine learning. It means the machine uses different layers to learn from the data.
+
+To break it down:
+
+* Deep learning is a subset of machine learning, which is a broader field of study.
+* In deep learning, machines use multiple layers (or "deep" layers) to process and learn from data.
+* This layered approach allows machines to analyze complex patterns and relationships within the data, enabling them to make accurate predictions or decisions.
+
+Is there anything specific you'd like to know about deep learning or machine learning?
