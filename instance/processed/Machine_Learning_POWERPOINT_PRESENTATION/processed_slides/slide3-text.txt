@@ -1,0 +1,8 @@
+**Why Machine Learning?**
+
+There are several reasons why machine learning has become increasingly important. Two key factors include:
+
+1. **Affordable Data Storage**: Much more affordable data storage solutions have made big data sets available to more organizations and for a much wider variety of applications.
+2. **Faster Processing**: Computing power is now faster than ever before, enabling the efficient processing of large datasets.
+
+These advancements have contributed to the growth and adoption of machine learning in various industries.
