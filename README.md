@@ -78,7 +78,7 @@ Welcome to the **Edu-Gen Platform**, a cutting-edge learning ecosystem designed 
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/THILLAINATARAJAN-B/opentrack.git
+   git clone https://github.com/SIVAPRAKASH5668/HACKHAZARDS-EDUGENAI-PLATFORM.git
    ```
 2. Navigate to the project directory:
    ```bash
